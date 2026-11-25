@@ -7,7 +7,7 @@
   --panel-line: #22392c;
   --ink: #e9f4ec;
   --ink-dim: #9db4a6;
-  --ink-faint: #63796a;
+  --ink-faint: #718a77;
   --signal: #4fe3a5;
   --signal-dim: #1d4d38;
   --amber: #f2b544;
@@ -258,7 +258,7 @@ tbody tr:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px;
   color: var(--amber);
   border: 1px solid rgba(242, 181, 68, 0.4);
   padding: 2px 7px;
-  border-radius: 20px;
+  border-radius: 3px;
   white-space: nowrap;
 }
 .empty { padding: 34px 22px; text-align: center; }
