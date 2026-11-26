@@ -3,74 +3,97 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Radar — pre-token protocols ranked by implied value</title>
+<title>Token Radar: pre-token protocols, priced and ranked</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<div class="aurora" aria-hidden="true"></div>
-<div class="shell">
+<header class="mast">
+  <div class="mast-name">Token Radar</div>
+  <p class="mast-line" id="mastLine">A register of protocols that record no token yet, each priced by the market its peers already trade in.</p>
+</header>
 
-  <header class="masthead">
-    <div class="brand">
-      <span class="brand-mark" aria-hidden="true"><span class="brand-ring"></span><span class="brand-dot"></span></span>
-      <span class="brand-word">TOKEN&nbsp;RADAR</span>
+<main>
+  <section class="toprow">
+    <div class="thesis">
+      <h1>Protocols with no token, priced as if they had one</h1>
+      <p class="standfirst">Every protocol here records no token. The radar prices each one from the market itself: the median market-cap to TVL of its live-token peers, adjusted for seven-day growth and for how long it has run without issuing. A model, not a promise.</p>
+      <p class="thesis-note">The watchlist is the floor: the 40 protocols at or above $50M of TVL that record no token. Below it sit 160 earlier protocols the radar exists to find. Protocols whose token already trades are set aside as the pricing peers, never ranked.</p>
     </div>
-    <p class="mast-meta" id="mastMeta">Snapshot — · DefiLlama protocol index · radar-2 model</p>
-  </header>
-
-  <section class="hero">
-    <div class="hero-copy">
-      <h1 id="heroTitle">40 watchlist protocols, ranked by implied value</h1>
-      <p class="lede">The watchlist is the floor: every protocol with at least $50M of TVL
-      and no token on record. The early radar adds 160 pre-token protocols below that floor.
-      Each implied value is priced from the market itself: the median market-cap to TVL of
-      the protocol's traded peers. A model, not a promise.</p>
-    </div>
-    <div class="statgrid" id="statGrid"></div>
+    <figure class="chart chart-plot">
+      <h2>Where does implied value sit against protocol size?</h2>
+      <div id="plot" role="img" aria-label="Scatter chart of implied value against TVL for all 200 protocols"></div>
+      <figcaption>
+        <span class="key"><span class="key-dot key-watch"></span>Watchlist, at or above the $50M floor</span>
+        <span class="key"><span class="key-dot key-early"></span>Early, below the floor</span>
+        <span class="key"><span class="key-line"></span>Priced at the global median multiple</span>
+        <span class="key-hint">Select any point to open its file.</span>
+      </figcaption>
+    </figure>
   </section>
 
-  <section class="controls glass">
-    <label class="ctl ctl-search">
-      <span class="ctl-label">Search</span>
-      <input id="q" type="search" placeholder="Search name, category or chain" autocomplete="off">
-    </label>
-    <label class="ctl">
-      <span class="ctl-label">Category</span>
-      <select id="fCategory"><option value="">All categories</option></select>
-    </label>
-    <label class="ctl">
-      <span class="ctl-label">Chain</span>
-      <select id="fChain"><option value="">All chains</option></select>
-    </label>
+  <dl class="ledger" id="ledger"></dl>
+
+  <section class="trio">
+    <figure class="chart chart-bars">
+      <h2>Which categories hold the pre-token value?</h2>
+      <div id="catbars"></div>
+      <figcaption>Total implied value per category across all 200 rows. Select a bar to filter the board by that category.</figcaption>
+    </figure>
+    <figure class="chart chart-hist">
+      <h2>How did the board move in seven days?</h2>
+      <div id="hist"></div>
+      <figcaption>Protocols per band of seven-day TVL change. Gains past +100% are gathered in the last band; one protocol reports no change.</figcaption>
+    </figure>
+    <article class="method">
+      <h2>How the price is made</h2>
+      <p>Implied value = TVL &times; peer multiple &times; growth &times; maturity. The multiple is the median market-cap-to-TVL of live-token protocols in the same category when at least three trade there, and the global median of 128 live peers otherwise. Growth leans on the seven-day TVL change, capped before it can shout; maturity rewards protocols that have run longer with no token.</p>
+      <p id="methodFact"></p>
+    </article>
+  </section>
+
+  <section class="boardsec">
+    <div class="board-head">
+      <h2>The board</h2>
+      <p class="board-sub">Ranked by implied value. Select a row for its model and its farm plan; select a column heading to sort.</p>
+    </div>
     <div class="ctl">
-      <span class="ctl-label">Token status</span>
-      <div class="seg" id="segStatus" role="tablist">
-        <button type="button" class="seg-btn is-on" data-status="pre">Pre-token</button>
-        <button type="button" class="seg-btn" data-status="live">Live token</button>
-      </div>
+      <label class="ctl-field ctl-search">Search
+        <input id="q" type="search" placeholder="Name, category or chain" autocomplete="off">
+      </label>
+      <label class="ctl-field">Category
+        <select id="fCat"></select>
+      </label>
+      <label class="ctl-field">Chain
+        <select id="fChain"></select>
+      </label>
+      <fieldset class="ctl-field ctl-status">
+        <legend>Token status</legend>
+        <div class="seg" role="group" aria-label="Token status">
+          <button type="button" id="segPre" class="seg-btn is-on" aria-pressed="true">Pre-token</button>
+          <button type="button" id="segLive" class="seg-btn" aria-pressed="false">Live token</button>
+        </div>
+      </fieldset>
+      <p class="ctl-count" id="count"></p>
     </div>
-    <p class="rows-count" id="rowsCount"></p>
+    <div class="tblwrap">
+      <table class="board" id="board" aria-busy="true">
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <p class="empty" id="empty" hidden>No protocols match these filters. <button type="button" id="clearFilters">Clear the filters</button> to see the whole board again.</p>
+    </div>
+    <p class="tblnote" id="tblnote"></p>
   </section>
+</main>
 
-  <main class="boardwrap glass">
-    <p class="board-note" id="boardNote"></p>
-    <table class="board" id="boardTable">
-      <thead id="boardHead"></thead>
-      <tbody id="boardBody"></tbody>
-    </table>
-    <p class="empty-note" id="emptyNote" hidden>No protocols match the current filters.</p>
-  </main>
+<footer class="foot">
+  <p id="footLine">Snapshot and source are named in the data file this page reads.</p>
+  <p>Implied values are this model's claim, worked out from the snapshot's own figures. They are not prices, and nothing here is a promise that a token will be issued.</p>
+</footer>
 
-  <footer class="colophon">
-    <p>Implied values are the model's own claim, priced from the snapshot's figures —
-    TVL, seven-day growth and time running with no token. An estimate, not a price,
-    and not a prediction that a token will ever be issued.</p>
-  </footer>
-</div>
-
-<div class="scrim" id="scrim" hidden>
-  <section class="sheet glass" role="dialog" aria-modal="true" id="sheet"></section>
-</div>
+<dialog class="sheet" id="sheet" aria-labelledby="sheetName">
+  <div class="sheet-inner" id="sheetInner"></div>
+</dialog>
 
 <script src="../data.js"></script>
 <script src="app.js"></script>
