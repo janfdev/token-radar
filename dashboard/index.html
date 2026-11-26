@@ -1,14 +1,77 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Radar: pre-token protocols ranked by implied value</title>
+<title>Token Radar — pre-token protocols ranked by implied value</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<a class="skip" href="#board">Skip to the board</a>
-<main id="board" tabindex="-1" aria-busy="true"></main>
+<div class="aurora" aria-hidden="true"></div>
+<div class="shell">
+
+  <header class="masthead">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><span class="brand-ring"></span><span class="brand-dot"></span></span>
+      <span class="brand-word">TOKEN&nbsp;RADAR</span>
+    </div>
+    <p class="mast-meta" id="mastMeta">Snapshot — · DefiLlama protocol index · radar-2 model</p>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <h1 id="heroTitle">40 watchlist protocols, ranked by implied value</h1>
+      <p class="lede">The watchlist is the floor: every protocol with at least $50M of TVL
+      and no token on record. The early radar adds 160 pre-token protocols below that floor.
+      Each implied value is priced from the market itself: the median market-cap to TVL of
+      the protocol's traded peers. A model, not a promise.</p>
+    </div>
+    <div class="statgrid" id="statGrid"></div>
+  </section>
+
+  <section class="controls glass">
+    <label class="ctl ctl-search">
+      <span class="ctl-label">Search</span>
+      <input id="q" type="search" placeholder="Search name, category or chain" autocomplete="off">
+    </label>
+    <label class="ctl">
+      <span class="ctl-label">Category</span>
+      <select id="fCategory"><option value="">All categories</option></select>
+    </label>
+    <label class="ctl">
+      <span class="ctl-label">Chain</span>
+      <select id="fChain"><option value="">All chains</option></select>
+    </label>
+    <div class="ctl">
+      <span class="ctl-label">Token status</span>
+      <div class="seg" id="segStatus" role="tablist">
+        <button type="button" class="seg-btn is-on" data-status="pre">Pre-token</button>
+        <button type="button" class="seg-btn" data-status="live">Live token</button>
+      </div>
+    </div>
+    <p class="rows-count" id="rowsCount"></p>
+  </section>
+
+  <main class="boardwrap glass">
+    <p class="board-note" id="boardNote"></p>
+    <table class="board" id="boardTable">
+      <thead id="boardHead"></thead>
+      <tbody id="boardBody"></tbody>
+    </table>
+    <p class="empty-note" id="emptyNote" hidden>No protocols match the current filters.</p>
+  </main>
+
+  <footer class="colophon">
+    <p>Implied values are the model's own claim, priced from the snapshot's figures —
+    TVL, seven-day growth and time running with no token. An estimate, not a price,
+    and not a prediction that a token will ever be issued.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <section class="sheet glass" role="dialog" aria-modal="true" id="sheet"></section>
+</div>
+
 <script src="../data.js"></script>
 <script src="app.js"></script>
 </body>
